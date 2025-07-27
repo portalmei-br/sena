@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telesena - Resgate seu Prêmio</title>
-    <meta name="description" content="Resgate seu prêmio da Telesena de forma rápida e segura. Digite seu CPF e código do prêmio para verificar se você foi contemplado.">
+    <title>Telesena - Consulte seu Prêmio</title>
+    <meta name="description" content="Consulte se você tem prêmios disponíveis na Telesena. Digite seu CPF e verifique se você foi contemplado.">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,8 +17,128 @@
             <div class="loading-spinner">
                 <div class="spinner"></div>
             </div>
-            <h3>Verificando seu prêmio...</h3>
-            <p id="loading-message">Aguarde enquanto consultamos nosso banco de dados</p>
+            <h3>Consultando seus dados...</h3>
+            <p id="loading-message">Verificando informações no banco de dados da Telesena</p>
+        </div>
+    </div>
+
+    <!-- Prize Modal -->
+    <div id="prize-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>Informações do Prêmio</h2>
+                <button class="modal-close" onclick="closePrizeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3 id="user-name">Nome do Usuário</h3>
+                        <p id="user-cpf">CPF: 000.000.000-00</p>
+                        <p id="user-location">Cidade, Estado</p>
+                    </div>
+                </div>
+                
+                <div class="prize-info">
+                    <div class="prize-status" id="prize-status">
+                        <div class="status-icon">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <div class="status-content">
+                            <h4>Parabéns! Você tem um prêmio disponível!</h4>
+                            <p class="prize-description">Prêmio especial para clientes da Telesena</p>
+                        </div>
+                    </div>
+                    
+                    <div class="prize-details">
+                        <div class="prize-amount">
+                            <span class="currency">R$</span>
+                            <span class="amount" id="prize-value">0,00</span>
+                        </div>
+                        <div class="prize-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Protocolo:</span>
+                                <span class="meta-value" id="prize-protocol">TSN-2025-000000</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Válido até:</span>
+                                <span class="meta-value" id="prize-expiry">31/12/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closePrizeModal()">
+                        <i class="fas fa-times"></i>
+                        Fechar
+                    </button>
+                    <button class="btn-primary" onclick="redirectToRedeem()">
+                        <i class="fas fa-external-link-alt"></i>
+                        Resgatar Prêmio
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Prize Modal -->
+    <div id="no-prize-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>Consulta Realizada</h2>
+                <button class="modal-close" onclick="closeNoPrizeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3 id="no-prize-user-name">Nome do Usuário</h3>
+                        <p id="no-prize-user-cpf">CPF: 000.000.000-00</p>
+                        <p id="no-prize-user-location">Cidade, Estado</p>
+                    </div>
+                </div>
+                
+                <div class="no-prize-info">
+                    <div class="no-prize-status">
+                        <div class="status-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="status-content">
+                            <h4>Nenhum prêmio encontrado</h4>
+                            <p>Não encontramos prêmios disponíveis para este CPF no momento.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="suggestions">
+                        <h5>O que você pode fazer:</h5>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Verifique se o CPF foi digitado corretamente</li>
+                            <li><i class="fas fa-check"></i> Consulte novamente em alguns dias</li>
+                            <li><i class="fas fa-check"></i> Entre em contato com nosso suporte</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeNoPrizeModal()">
+                        <i class="fas fa-times"></i>
+                        Fechar
+                    </button>
+                    <button class="btn-primary" onclick="newSearch()">
+                        <i class="fas fa-search"></i>
+                        Nova Consulta
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -58,11 +178,11 @@
             <div class="container">
                 <div class="hero-text">
                     <h1 class="hero-title">
-                        Resgate seu <span class="highlight">Prêmio da Telesena</span> 
+                        Consulte seu <span class="highlight">Prêmio da Telesena</span> 
                         <br>de Forma Rápida e Segura
                     </h1>
                     <p class="hero-description">
-                        Você pode ter sido contemplado! Digite seu CPF e código do prêmio para verificar 
+                        Você pode ter sido contemplado! Digite apenas seu CPF para verificar 
                         se você tem direito a resgatar um prêmio especial da Telesena.
                     </p>
                 </div>
@@ -80,27 +200,17 @@
                                     maxlength="14"
                                 >
                             </div>
-                            <div class="input-wrapper">
-                                <i class="fas fa-ticket-alt search-icon"></i>
-                                <input 
-                                    type="text" 
-                                    id="codigo-input" 
-                                    placeholder="Código do prêmio"
-                                    class="search-input"
-                                    maxlength="10"
-                                >
-                            </div>
                             <button type="button" id="search-btn" class="search-button">
                                 <i class="fas fa-search"></i>
-                                <span>Verificar Prêmio</span>
+                                <span>Consultar Prêmio</span>
                             </button>
                         </div>
                     </div>
                     
                     <div class="search-suggestions">
-                        <span class="suggestions-label">Onde encontrar o código:</span>
+                        <span class="suggestions-label">Informação importante:</span>
                         <div class="suggestions-text">
-                            <p>O código do prêmio está no SMS ou e-mail que você recebeu da Telesena</p>
+                            <p>Digite apenas seu CPF para consultar se você possui prêmios disponíveis</p>
                         </div>
                     </div>
                 </div>
@@ -110,14 +220,14 @@
                         <div class="stat-icon">
                             <i class="fas fa-trophy"></i>
                         </div>
-                        <span class="stat-number" data-target="50000">0</span>
-                        <span class="stat-label">Prêmios Pagos</span>
+                        <span class="stat-number" data-target="75000">0</span>
+                        <span class="stat-label">Prêmios Consultados</span>
                     </div>
                     <div class="stat-item">
                         <div class="stat-icon">
                             <i class="fas fa-users"></i>
                         </div>
-                        <span class="stat-number" data-target="2500">0</span>
+                        <span class="stat-number" data-target="3200">0</span>
                         <span class="stat-label">Clientes Atendidos</span>
                     </div>
                     <div class="stat-item">
@@ -137,161 +247,12 @@
         </div>
     </section>
 
-    <!-- Results Section -->
-    <section id="results" class="results-section" style="display: none;">
-        <div class="container">
-            <div class="results-header">
-                <h2 class="section-title">Seu Prêmio Encontrado!</h2>
-                <div class="security-badge">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Verificação Segura</span>
-                </div>
-            </div>
-            <div id="results-container" class="results-grid">
-                <!-- Results will be populated by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Payment Section -->
-    <section id="payment" class="payment-section" style="display: none;">
-        <div class="container">
-            <div class="payment-header">
-                <h2 class="section-title">Finalize o Resgate do seu Prêmio</h2>
-                <p class="payment-subtitle">Para liberar seu prêmio, é necessário o pagamento de uma taxa de processamento</p>
-            </div>
-            <div class="payment-container">
-                <div class="payment-info">
-                    <div class="info-card">
-                        <h3>Por que preciso pagar uma taxa?</h3>
-                        <ul>
-                            <li><i class="fas fa-check"></i> Processamento bancário e transferência</li>
-                            <li><i class="fas fa-check"></i> Taxas de impostos e regulamentação</li>
-                            <li><i class="fas fa-check"></i> Verificação de segurança e autenticidade</li>
-                            <li><i class="fas fa-check"></i> Processamento imediato via PIX</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="payment-form">
-                    <div class="form-card">
-                        <h3>Dados para Pagamento</h3>
-                        <form id="payment-form">
-                            <div class="form-group">
-                                <label for="nome-completo">Nome Completo</label>
-                                <input type="text" id="nome-completo" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="telefone">Telefone</label>
-                                <input type="tel" id="telefone" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">E-mail</label>
-                                <input type="email" id="email" required>
-                            </div>
-                            <div class="payment-method">
-                                <h4>Método de Pagamento</h4>
-                                <div class="pix-option selected">
-                                    <i class="fas fa-qrcode"></i>
-                                    <span>PIX - Pagamento Instantâneo</span>
-                                    <div class="pix-amount">
-                                        <span id="taxa-valor">R$ 89,90</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="payment-button">
-                                <i class="fas fa-credit-card"></i>
-                                <span>Pagar Taxa e Receber Prêmio</span>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PIX Section -->
-    <section id="pix" class="pix-section" style="display: none;">
-        <div class="container">
-            <div class="pix-container">
-                <div class="pix-header">
-                    <h2>Pagamento via PIX</h2>
-                    <p>Escaneie o QR Code ou copie a chave PIX para efetuar o pagamento</p>
-                </div>
-                <div class="pix-content">
-                    <div class="qr-code">
-                        <div class="qr-placeholder">
-                            <i class="fas fa-qrcode"></i>
-                            <p>QR Code PIX</p>
-                        </div>
-                    </div>
-                    <div class="pix-details">
-                        <div class="pix-info">
-                            <h3>Informações do Pagamento</h3>
-                            <div class="info-row">
-                                <span>Valor:</span>
-                                <strong id="pix-valor">R$ 89,90</strong>
-                            </div>
-                            <div class="info-row">
-                                <span>Beneficiário:</span>
-                                <strong>Telesena Processamento Ltda</strong>
-                            </div>
-                            <div class="info-row">
-                                <span>Chave PIX:</span>
-                                <div class="pix-key">
-                                    <span id="pix-key">pix@telesena.com.br</span>
-                                    <button class="copy-btn" onclick="copyPixKey()">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="payment-timer">
-                            <h4>Tempo para pagamento:</h4>
-                            <div class="timer" id="payment-timer">15:00</div>
-                        </div>
-                        <button class="confirm-payment-btn" onclick="confirmPayment()">
-                            <i class="fas fa-check"></i>
-                            Já Paguei - Confirmar Pagamento
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Success Section -->
-    <section id="success" class="success-section" style="display: none;">
-        <div class="container">
-            <div class="success-content">
-                <div class="success-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <h2>Parabéns! Seu prêmio foi liberado!</h2>
-                <p>O valor será transferido para sua conta em até 2 horas úteis.</p>
-                <div class="success-details">
-                    <div class="detail-item">
-                        <span>Prêmio:</span>
-                        <strong id="success-premio">R$ 2.500,00</strong>
-                    </div>
-                    <div class="detail-item">
-                        <span>Protocolo:</span>
-                        <strong id="success-protocolo">TSN-2025-001234</strong>
-                    </div>
-                </div>
-                <button class="new-search-btn" onclick="resetForm()">
-                    <i class="fas fa-search"></i>
-                    Verificar Outro Prêmio
-                </button>
-            </div>
-        </div>
-    </section>
-
     <!-- How It Works Section -->
     <section id="como-funciona" class="how-it-works">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Como Funciona</h2>
-                <p class="section-subtitle">Resgate seu prêmio em 3 passos simples</p>
+                <p class="section-subtitle">Consulte seu prêmio em 2 passos simples</p>
             </div>
             
             <div class="steps-container">
@@ -302,8 +263,8 @@
                             <span class="step-number">1</span>
                         </div>
                         <div class="step-content">
-                            <h3>Digite seus Dados</h3>
-                            <p>Informe seu CPF e o código do prêmio que você recebeu por SMS ou e-mail.</p>
+                            <h3>Digite seu CPF</h3>
+                            <p>Informe apenas seu CPF no campo acima. Nossa consulta é rápida e segura.</p>
                         </div>
                     </div>
                     
@@ -313,19 +274,8 @@
                             <span class="step-number">2</span>
                         </div>
                         <div class="step-content">
-                            <h3>Confirme seu Prêmio</h3>
-                            <p>Veja os detalhes do seu prêmio e pague a taxa de processamento via PIX.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step-card" data-step="3">
-                        <div class="step-icon">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span class="step-number">3</span>
-                        </div>
-                        <div class="step-content">
-                            <h3>Receba seu Prêmio</h3>
-                            <p>Após a confirmação do pagamento, seu prêmio será transferido em até 2 horas.</p>
+                            <h3>Veja seu Prêmio</h3>
+                            <p>Se você tiver prêmios disponíveis, as informações aparecerão na tela instantaneamente.</p>
                         </div>
                     </div>
                 </div>
@@ -353,8 +303,8 @@
                         <i class="fas fa-clock"></i>
                     </div>
                     <div class="feature-content">
-                        <h3>Pagamento Rápido</h3>
-                        <p>Receba seu prêmio em até 2 horas após a confirmação do pagamento.</p>
+                        <h3>Consulta Instantânea</h3>
+                        <p>Resultado da consulta em segundos, sem complicações ou burocracias.</p>
                     </div>
                 </div>
                 
@@ -374,7 +324,7 @@
                     </div>
                     <div class="feature-content">
                         <h3>Acesso Mobile</h3>
-                        <p>Resgate seu prêmio de qualquer lugar usando seu smartphone.</p>
+                        <p>Consulte seus prêmios de qualquer lugar usando seu smartphone.</p>
                     </div>
                 </div>
             </div>
@@ -386,7 +336,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Depoimentos de Clientes</h2>
-                <p class="section-subtitle">Veja o que nossos clientes falam sobre o resgate de prêmios</p>
+                <p class="section-subtitle">Veja o que nossos clientes falam sobre nossa plataforma</p>
             </div>
             
             <div class="testimonials-grid">
@@ -399,7 +349,7 @@
                         <i class="fas fa-star"></i>
                     </div>
                     <div class="testimonial-content">
-                        <p>"Recebi R$ 1.200,00 em menos de 2 horas! O processo foi super rápido e seguro. Recomendo!"</p>
+                        <p>"Muito fácil de usar! Digitei meu CPF e descobri que tinha um prêmio esperando por mim. Recomendo!"</p>
                     </div>
                     <div class="testimonial-author">
                         <div class="author-avatar">
@@ -421,7 +371,7 @@
                         <i class="fas fa-star"></i>
                     </div>
                     <div class="testimonial-content">
-                        <p>"Não acreditei quando vi que tinha ganhado R$ 3.500,00! O atendimento foi excelente e recebi tudo certinho."</p>
+                        <p>"Sistema muito rápido e confiável. Em segundos já sabia se tinha prêmios disponíveis. Excelente!"</p>
                     </div>
                     <div class="testimonial-author">
                         <div class="author-avatar">
@@ -443,7 +393,7 @@
                         <i class="fas fa-star"></i>
                     </div>
                     <div class="testimonial-content">
-                        <p>"Processo muito fácil! Paguei a taxa pelo PIX e em 1 hora já estava com meu prêmio de R$ 800,00 na conta."</p>
+                        <p>"Interface muito profissional e segura. Consultei meus dados sem nenhuma preocupação."</p>
                     </div>
                     <div class="testimonial-author">
                         <div class="author-avatar">
@@ -464,47 +414,47 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Perguntas Frequentes</h2>
-                <p class="section-subtitle">Tire suas dúvidas sobre o resgate de prêmios</p>
+                <p class="section-subtitle">Tire suas dúvidas sobre a consulta de prêmios</p>
             </div>
             
             <div class="faq-container">
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>Por que preciso pagar uma taxa para resgatar meu prêmio?</h3>
+                        <h3>Como funciona a consulta de prêmios?</h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>A taxa cobre os custos de processamento bancário, impostos obrigatórios e verificação de segurança. É um procedimento padrão para garantir que o prêmio seja transferido de forma segura e legal.</p>
+                        <p>Basta digitar seu CPF no campo acima e clicar em "Consultar Prêmio". Nosso sistema verificará automaticamente se você possui prêmios disponíveis.</p>
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>Quanto tempo demora para receber o prêmio?</h3>
+                        <h3>A consulta é gratuita?</h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Após a confirmação do pagamento da taxa, seu prêmio será transferido em até 2 horas úteis diretamente para sua conta bancária.</p>
+                        <p>Sim! A consulta de prêmios é completamente gratuita. Você pode verificar quantas vezes quiser sem nenhum custo.</p>
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>Como sei se meu código é válido?</h3>
+                        <h3>Meus dados estão seguros?</h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Digite seu CPF e código no formulário acima. Nosso sistema verificará automaticamente se você tem direito a algum prêmio.</p>
+                        <p>Sim! Utilizamos criptografia SSL e todos os dados são protegidos conforme a Lei Geral de Proteção de Dados (LGPD).</p>
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>O processo é seguro?</h3>
+                        <h3>E se eu tiver um prêmio disponível?</h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Sim! Utilizamos criptografia SSL e todos os dados são protegidos. Somos uma empresa licenciada e regulamentada.</p>
+                        <p>Se você tiver prêmios disponíveis, as informações aparecerão na tela com todos os detalhes e instruções para o resgate.</p>
                     </div>
                 </div>
             </div>
@@ -518,11 +468,11 @@
                 <div class="cta-icon">
                     <i class="fas fa-gift"></i>
                 </div>
-                <h2>Não perca tempo! Verifique agora se você tem um prêmio</h2>
-                <p>Milhares de brasileiros já resgataram seus prêmios. Você pode ser o próximo!</p>
+                <h2>Não perca tempo! Consulte agora se você tem um prêmio</h2>
+                <p>Milhares de brasileiros já consultaram seus prêmios. Você pode ser o próximo!</p>
                 <button class="cta-button" onclick="document.getElementById('cpf-input').focus(); document.getElementById('inicio').scrollIntoView({behavior: 'smooth'})">
                     <i class="fas fa-search"></i>
-                    <span>Verificar Meu Prêmio Agora</span>
+                    <span>Consultar Meu Prêmio Agora</span>
                 </button>
             </div>
         </div>
@@ -551,7 +501,7 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Resgate de Prêmios</h3>
+                    <h3>Consulta de Prêmios</h3>
                     <ul class="footer-links">
                         <li><a href="#como-funciona">Como Funciona</a></li>
                         <li><a href="#faq">Perguntas Frequentes</a></li>
